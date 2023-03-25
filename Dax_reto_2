@@ -1,0 +1,18 @@
+Colores = //Reto DAX 2 de EDNA Enterpise
+//Con values creamos una tabla virtual con los campos unicos de años
+var Anio=VALUES('Año'[Año])
+// Aca cremos una variavle que devuele si selecciono o esta seleccionado la columan year
+var Anio_1=SELECTEDVALUE(Dates[Year])
+//Aca creamos si se selecciona del segmentador algun color
+var seleccion_color=SELECTEDVALUE(Colores_tabla[Colores])
+//Aca validamos y hacemos que segun lo seleccionado del la variable anterior seleccione el su equivalente en hexadecimal
+var color_pasar=SWITCH(seleccion_color,
+                        "Azul","#4738c5",
+                        "Rojo","#fd000a",
+                        "Verde","#00fd5a")
+//Con este IF lo que hacemos es validar si Anio esta seleccionada y si esta seleccionada en el contexto de filtro dado que esta como en el Eje de las Y eso queire decir que da el valor de 1 amenos que activemos el selectvalue con el clic y este cambia a 0 por que entonces los que no seleccionemos, no estara activandose y quedaran con el color "#34cdcb".                        
+var devuelve=if (Anio_1 IN Anio,1,0)
+//Aca con un simple Si validado si devuelve el anteior si un 1 o un 0 para saber que año debo relsatar, y en los resultados le paso la variable que contiene el color seleccionado o uno predefinido para los años que no este seleccionados en el segmentador y validamos con el isfiltered que como vemos en la tabla devuelve true en caso de que el filtro este activado esto es para el caso que no se seleccione ningun año colo el valor del color por defecto que es "#34cdcb"
+var color=IF(devuelve=1 && ISFILTERED('Año'[Año]),color_pasar,"#34cdcb")
+return
+color
